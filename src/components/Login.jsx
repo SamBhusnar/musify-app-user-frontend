@@ -2,6 +2,7 @@ import React from "react";
 import { assets } from "../assets/assets.js";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext.jsx";
 
 function Login() {
   // create individual state for form fields
@@ -11,6 +12,7 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   // error state
   const [error, setError] = useState("");
+  const { login } = useAuth();
   const handleSubmit = async (e) => {
     e.preventDefault();
     // handle login logic here
@@ -21,18 +23,30 @@ function Login() {
       toast.error("All fields are required");
       return;
     }
+
     // basic validation
     setIsLoading(true);
+    try {
+      const result = await login(email, password);
 
-    // settimeout to simulate server request
-    const fn = () => {
-      return new Promise((resolve) => setTimeout(resolve, 3000));
-    };
-    await fn();
-    // log to console
-    console.log({ email, password });
-    setIsLoading(false);
-    toast.success("Login successful!");
+      if (result.success) {
+        toast.success(result.message);
+        // navigate to login page after successful registration
+        // navigate("/login");
+      } else {
+        console.log(result);
+
+        toast.error(result.message);
+        setError(result.message);
+      }
+    } catch (error) {
+      console.log(error);
+
+      toast.error("An unexpected error occurred. Please try again.");
+      setError("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-900 via-black- to-green-900 flex items-center justify-center">
