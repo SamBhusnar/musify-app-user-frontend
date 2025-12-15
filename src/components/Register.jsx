@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 
-function Register() {
+function Register({ onSwitchToLogin }) {
   // create individual state for form fields
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,6 +39,7 @@ function Register() {
         toast.success(result.message);
         // navigate to login page after successful registration
         // navigate("/login");
+        onSwitchToLogin();
       } else {
         toast.error(result.message);
         setError(result.message);
@@ -69,6 +70,12 @@ function Register() {
         {/* Registration form */}
         <div className="bg-gray-900/80 backdrop-blur-lg p-8 rounded-2xl shadow-2xl border border-gray-700">
           <form className="space-y-6" onSubmit={handleSubmit}>
+            {/* error state */}
+            {error && (
+              <div className="bg-red-500/20 border border-red-500 text-red-300 p-3  rounded-lg text-sm">
+                {error}
+              </div>
+            )}
             {/* email field */}
             <div>
               <label
@@ -135,14 +142,24 @@ function Register() {
               className="w-full py-3 px-4  border border-transparent rounded-lg  shadow-sm  text-sm text-white font-medium bg-green-500 hover:bg-green-600 focus:outline-none   focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
               disabled={isLoading}
             >
-              {isLoading ? "Registering..." : "Sign Up"}
+              {isLoading ? (
+                <div className="flex items-center justify-center ">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-3"></div>
+                  Creating Account...
+                </div>
+              ) : (
+                <>Create Account</>
+              )}
             </button>
           </form>
           {/* Switch to login */}
           <div className="text-center mt-6">
             <p className="text-gray-400 text-sm">
               Already have an account?{" "}
-              <button className="text-green-400 hover:text-green-500 font-medium transition-colors  cursor-pointer">
+              <button
+                className="text-green-400 hover:text-green-500 font-medium transition-colors  cursor-pointer"
+                onClick={onSwitchToLogin}
+              >
                 "Sign in here"
               </button>
             </p>

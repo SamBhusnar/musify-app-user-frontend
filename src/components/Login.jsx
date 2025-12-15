@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 
-function Login() {
+function Login({ onSwitchToRegister }) {
   // create individual state for form fields
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,7 +35,6 @@ function Login() {
         // navigate("/login");
       } else {
         console.log(result);
-
         toast.error(result.message);
         setError(result.message);
       }
@@ -67,6 +66,12 @@ function Login() {
         <div className="bg-gray-900/80 backdrop-blur-lg p-8 rounded-2xl shadow-2xl border border-gray-700">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {" "}
+            {/* error state */}
+            {error && (
+              <div className="bg-red-500/20 border border-red-500 text-red-300 p-3  rounded-lg text-sm">
+                {error}
+              </div>
+            )}
             {/* email field */}
             <div>
               <label
@@ -113,14 +118,24 @@ function Login() {
               disabled={isLoading}
               className="w-full py-3 px-4  border border-transparent rounded-lg  shadow-sm  text-sm text-white font-medium bg-green-500 hover:bg-green-600 focus:outline-none   focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
             >
-              {isLoading ? "Logging in..." : "Sign In"}
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Signing in...
+                </div>
+              ) : (
+                "Sign In"
+              )}
             </button>
           </form>
           {/* Switch to register */}
           <div className="text-center mt-6">
             <p className="text-gray-400 text-sm">
               Don't have an account?{" "}
-              <button className="text-green-400 hover:text-green-500 font-medium transition-colors  cursor-pointer">
+              <button
+                className="text-green-400 hover:text-green-500 font-medium transition-colors  cursor-pointer"
+                onClick={onSwitchToRegister}
+              >
                 Sign up here
               </button>
             </p>

@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -15,7 +15,17 @@ export const AuthProvider = ({ children }) => {
   const API_BASE_URL = "http://localhost:8080";
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("userToken") || null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    // setLoading(true);
+    const storedToken = localStorage.getItem("userToken");
+    const storedUserData = localStorage.getItem("userData");
+    if (storedToken && storedUserData) {
+      setToken(storedToken);
+      setUser(JSON.parse(storedUserData));
+    }
+    setLoading(false);
+  }, []);
   const register = async (email, password) => {
     // registration logic here
     try {
@@ -93,10 +103,21 @@ export const AuthProvider = ({ children }) => {
   const isAuthenticated = () => {
     return !!token && !!user;
   };
+  const logout = () => {
+    setToken(null);
+    setUser(null);
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("userData");
+    toast.success("Logged out successfully");
+  };
   const contextValue = {
     register,
     login,
     isAuthenticated,
+    loading,
+    logout,
+    user,
+    
   };
 
   return (
