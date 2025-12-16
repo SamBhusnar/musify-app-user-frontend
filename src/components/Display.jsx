@@ -20,6 +20,11 @@ function Display() {
             <Route path="/search" element={<Search />} />
           </Routes>
         </div>
+        <div
+        className=""
+        >
+
+        </div>
       </div>
     </div>
   );

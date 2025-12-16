@@ -7,6 +7,7 @@ function NavBar() {
   const handleLogout = () => {
     logout();
   };
+  
   return (
     <>
       <div className="w-full flex justify-between items-center font-semibold ">

@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+export const API_BASE_URL = "http://localhost:8080";
 
 const AuthContext = createContext(null);
 export const useAuth = () => {
@@ -12,7 +13,6 @@ export const useAuth = () => {
   return context;
 };
 export const AuthProvider = ({ children }) => {
-  const API_BASE_URL = "http://localhost:8080";
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("userToken") || null);
   const [loading, setLoading] = useState(true);
@@ -103,6 +103,9 @@ export const AuthProvider = ({ children }) => {
   const isAuthenticated = () => {
     return !!token && !!user;
   };
+  const getAuthHeaders = () => {
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
   const logout = () => {
     setToken(null);
     setUser(null);
@@ -117,7 +120,8 @@ export const AuthProvider = ({ children }) => {
     loading,
     logout,
     user,
-    
+    token,
+    getAuthHeaders,
   };
 
   return (
