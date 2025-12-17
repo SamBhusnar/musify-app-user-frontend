@@ -1,13 +1,23 @@
 import { ArrowRight, Home, Library, Plus, Search, X } from "lucide-react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSearch } from "../context/SearchContext";
 
 function Sidebar() {
   const navigate = useNavigate();
+  const { searchQuery, setSearchQuery, setIsSearchActive, clearSearch } =
+    useSearch();
   const [showSearchInput, setShowSearchInput] = useState(false);
   const handleSearchClick = () => {
-    setShowSearchInput((prev) => !prev);
+    setShowSearchInput(true);
+    setIsSearchActive(true);
     navigate("/search");
+  };
+  const handleClearSearch = () => {
+    // setSearchQuery("");
+    setShowSearchInput(false);
+    clearSearch();
+    // navigate("/");
   };
   return (
     <div className="w-[25%] p-2 h-full flex-col gap-2 text-white hidden lg:flex">
@@ -39,10 +49,12 @@ function Sidebar() {
                   placeholder="What do you want to listen to?"
                   className="flex-1 bg-[#2a2a2a] text-white rounded-full px-3 py-2 placeholder-gray-400 text-sm fold focus:outline-none focus:ring-2 focus:ring-green-400"
                   autoFocus
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 {/* button */}
                 <button
-                  onClick={handleSearchClick}
+                  onClick={handleClearSearch}
                   className="p-1 text-gray-700 rounded-full  transition-colors"
                 >
                   <X className="w-4 h-4 text-gray-400 hover:text-white" />

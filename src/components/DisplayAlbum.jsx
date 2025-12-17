@@ -62,7 +62,9 @@ function DisplayAlbum({ album }) {
               </p>
               <p className="text-[15px]">{album.name}</p>
               <p className="text-[15px] hidden sm:block"> 5 days ago</p>
-              <p className="text-[15px] hidden sm:block">{"            "} {item.duration}</p>
+              <p className="text-[15px] hidden sm:block">
+                {"            "} {item.duration}
+              </p>
             </div>
           );
         })}

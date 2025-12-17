@@ -32,13 +32,15 @@ function Display() {
   }, [isAlbumPage, bgColor]);
 
   return (
-    <div className="w-[100%] m-2 bg-[#121212] text-white lg:w-[75%] lg:ml-0 flex flex-col ">
+    <div
+      ref={displayRef}
+      className="w-[100%] m-2 bg-[#121212] text-white lg:w-[75%] lg:ml-0 flex flex-col "
+    >
       {/* Sticky navbar */}
-      <div
-        ref={displayRef}
-        className="sticky top-0 z-10 bg-[#121212]/95  flex flex-col  w-full backdrop-blur-sm border-b border-gray-800/50 px-6 pt-4 pb-2"
-      >
+      <div className="sticky top-0 z-10 bg-[#121212]/95  flex flex-col  w-full backdrop-blur-sm border-b border-gray-800/50 px-6 pt-4 pb-2">
         <NavBar />
+      </div>
+      
         {/* scrollable content */}
         <div className="flex-1 px-6 py-4 overflow-auto">
           <Routes>
@@ -53,8 +55,7 @@ function Display() {
             />
             <Route path="/search" element={<Search />} />
           </Routes>
-        </div>
-        <div className=""></div>
+         
       </div>
     </div>
   );

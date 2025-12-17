@@ -6,6 +6,7 @@ import AlbumItem from "./AlbumItem";
 import { useContext } from "react";
 import SongItem from "./SongItem";
 
+
 function DisplayHome() {
   const { songsData, albumsData } = useContext(PlayerContext);
 
