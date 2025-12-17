@@ -33,7 +33,7 @@ function DisplayHome() {
         <div className="flex overflow-auto">
           {/* songs data */}
 
-          {songsData.map((item, index) => {
+          {songsData?.map((item, index) => {
             return (
               <SongItem
                 key={index}

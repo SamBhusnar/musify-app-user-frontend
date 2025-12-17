@@ -9,7 +9,7 @@ export const PlayerContextProvider = ({ children }) => {
   const [albumsData, setAlbumsData] = useState([]);
   const { user, token, getAuthHeaders } = useAuth();
   const [track, setTtrack] = useState(songsData[0]);
-  const [playStatus, setPlayStatus] = useState();
+  const [playStatus, setPlayStatus] = useState(false);
   const [time, setTime] = useState({
     currentTime: {
       second: 0,
@@ -38,29 +38,31 @@ export const PlayerContextProvider = ({ children }) => {
         setTtrack(song);
       }
     });
-    await audioRef.current?.play();
     setPlayStatus(true);
+    await audioRef.current?.play();
   };
   const previous = async () => {
     songsData.map(async (item, index) => {
       if (track._id === item._id && index > 0) {
         setTtrack(songsData[index - 1]);
-        await audioRef.current?.play();
-        setPlayStatus(true);
       }
     });
+    // setPlayStatus(true);
+    // audioRef.current.play();
   };
   const next = async () => {
     songsData.map(async (item, index) => {
       if (track._id === item._id && index < songsData.length - 1) {
         setTtrack(songsData[index + 1]);
-        await audioRef.current?.play();
-        setPlayStatus(true);
       }
     });
+    // audioRef.current.play();
+    // setPlayStatus(true);
   };
   const seekSong = async (event) => {
-    audioRef.current.currentTime=(event.nativeEvent.offsetX/seekBg.current.offsetWidth)*audioRef.current?.duration;
+    audioRef.current.currentTime =
+      (event.nativeEvent.offsetX / seekBg.current.offsetWidth) *
+      audioRef.current?.duration;
   };
 
   const getSongsData = async () => {
@@ -118,6 +120,7 @@ export const PlayerContextProvider = ({ children }) => {
   };
 
   // effect hook to call getAlbumsData when user changes
+
   useEffect(() => {
     if (user && token) {
       getAlbumsData();
@@ -130,6 +133,10 @@ export const PlayerContextProvider = ({ children }) => {
     if (!audio) {
       return;
     }
+    // load and play the audio
+    audioRef.current.load();
+    audioRef.current.play();
+    setPlayStatus(true);
     const updateSeekBar = () => {
       if (seekBar.current && audio.duration) {
         const progress = (audio.currentTime / audio.duration) * 100;
