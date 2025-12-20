@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-export const API_BASE_URL = "http://localhost:8080";
+export const API_BASE_URL = "https://musify-app-2.onrender.com";
 
 const AuthContext = createContext(null);
 export const useAuth = () => {
